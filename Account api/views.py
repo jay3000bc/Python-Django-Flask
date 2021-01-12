@@ -25,33 +25,16 @@ from jist_api.models import *
 from jist_api.serializers import *
 
 
-# CLIENT_ID = 'cgVe4jHh7yIHrdaV6NHaUgsxTcIEdNfOpr61cLRu'
-# CLIENT_SECRET = 'ooFnMZYuMck1buU709RZcxYURlv1Q1sHoFoHKsJFHkErXkJ4Vl1SnPveWVQY6vcXqx6NvXgbiSXBVrcg4awg7Qwf0PRMDBSpIDuTTf2YIqU4VkTf7fWV4FnRHJ4daCs4'
-
-
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Students.objects.all()
     serializer_class = studentSerializer
-    # authentication_classes = [TokenAuthentication,]
-    # authentication_classes = [TokenAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    # permission_classes = [AllowAny]
 
-    # def post(self, request, *args, **kwargs):
-    #     serializer = studentSerializer(data=request.data)
-    #     print("*****************************************************")
-    #     print(request.data['depertment'])
-    #     print("*****************************************************")
-    #     depertment_instance = depertment.objects.get(dept_name=request.data['depertment'])
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save(depertment_id=depertment_instance.id)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class getStudentsFromQuery(viewsets.ModelViewSet):
     serializer_class = AdmissonSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
 
     def get_queryset(self):
         return Admission.objects.filter(depertment_id=self.request.query_params.get('depertment'))
@@ -60,23 +43,18 @@ class getStudentsFromQuery(viewsets.ModelViewSet):
 class Transfer_StudentViewSet(viewsets.ModelViewSet):
     queryset = Transfer_Students.objects.all()
     serializer_class = transfer_studentSerializer
-    # authentication_classes = [TokenAuthentication,]
-    # authentication_classes = [TokenAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    # permission_classes = [AllowAny]
 
 
 class DepertmentViewSet(viewsets.ModelViewSet):
     queryset = Depertment.objects.all()
     serializer_class = depertmentSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
 
 
 class getDepertmentIdViewSet(viewsets.ModelViewSet):
     serializer_class = depertmentIdSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
 
     def get_queryset(self):
         return Depertment.objects.filter(dept_name__exact=self.request.query_params.get('depertment'))
@@ -85,24 +63,15 @@ class getDepertmentIdViewSet(viewsets.ModelViewSet):
 class BranchViewSet(viewsets.ModelViewSet):
     queryset = Branch.objects.all()
     serializer_class = branchSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
-
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
 
 class GetBranchViewSet(viewsets.ModelViewSet):
     serializer_class = getBranchSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
 
     def get_queryset(self):
         return Branch.objects.filter(depertment=self.request.query_params.get('depertment'))
 
-
-# class SigninInfoViewSet(viewsets.ModelViewSet):
-#     queryset = signinInfo.objects.all()
-#     serializer_class = signinInfoSerializer
-#     # authentication_classes = [TokenAuthentication,]
-#     # permission_classes = [IsAuthenticated, IsAdminUser]
 
 #To get the client's ip address
 def get_client_ip(request):
@@ -117,13 +86,6 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
         print(ip)
     return ip
-    # ip = request.META.get("HTTP_X_FORWARDED_FOR", None)
-    # if ip:
-    #     # X_FORWARDED_FOR returns client1, proxy1, proxy2,...
-    #     ip = ip.split(", ")[0]
-    # else:
-    #     ip = request.META.get("REMOTE_ADDR")
-    # return ip
 
 #to get the time.
 def get_time():
@@ -143,13 +105,10 @@ def signinInfoView(request):
     elif request.method == "POST":
         print(request)
         time.sleep(0.01)
-        # s = signinInfo.objects.get(user_id=1)
         json_parser = JSONParser()
-        # data = json_parser.parse(request)
         data = {
             "client_ip": get_client_ip(request),
-            "timestamp": get_time(),
-            # "new_timestamp": get_time()
+            "timestamp": get_time()
         }
         serializer = signinInfoSerializer(data=data)
         # serializer = UserSerializer(data=data)
@@ -164,17 +123,14 @@ def signinInfoView(request):
 def token(request):
     '''
     Gets tokens with username and password. Input should be in the format:
-    {"username": "username", "password":"password123"}
+    {"username": "username", "password":"password"}
     '''
     time.sleep(0.01)
     r = requests.post(
         'http://127.0.0.1:8000/oauth2/token/',
-        # 'https://alegralabs.com:8802/oauth2/token/',
         data = {
                 'grant_type':'password',
-                # 'username': username,
                 'username': request.data['username'],
-                # 'password': password,
                 'password': request.data['password'],
                 'client_id': request.data['client_id'],
                 'client_secret': request.data['client_secret'],
@@ -182,7 +138,6 @@ def token(request):
         verify = False
     )
     data = r.json()
-    # return data
     return Response(r.json())
 
 
@@ -196,7 +151,6 @@ def refresh_token(request):
     time.sleep(0.01)
     r = requests.post(
         'http://127.0.0.1:8000/oauth2/token/',
-        # 'https://alegralabs.com:8802/oauth2/token/',
         data = {
                 'grant_type': 'refresh_token',
                 'refresh_token': request.data['refresh_token'],
@@ -219,7 +173,6 @@ def revoke_token(request):
 
     r = requests.post(
         'http://127.0.0.1:8000/oauth2/revoke_token/',
-        # 'https://alegralabs.com:8802/oauth2/revoke_token/',
         data = {
                 'token': request.data['token'],
                 'client_id': request.data['client_id'],
@@ -238,15 +191,11 @@ def revoke_token(request):
 
 class UserCreateViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    # print(len(queryset))
     serializer_class = UserSerializer
     permission_classes = [AllowAny,]
 
-    # @action(detail=True, methods=['post'])
     def create(self, request):
         serializer = self.serializer_class(data=request.data)
-        # user = self.get_object()
-        # serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             if 'password' not in serializer.validated_data:
                 return Response({
@@ -281,10 +230,8 @@ class UserCreateViewSet(viewsets.ModelViewSet):
 
 class PasswordChangeViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    # print(len(queryset))
     serializer_class = PasswordChangeSerializer
     permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    # permission_classes = [AllowAny,]
 
     def get_object(self, queryset=None):
         obj = self.request.user
@@ -303,31 +250,15 @@ class PasswordChangeViewset(viewsets.ModelViewSet):
             print(serializer.data.get("old_password"))
             # if not self.object.check_password(serializer.data.get("old_password")):
             if not self.object.check_password(request.data.get("old_password")):
-                # return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
                 return Response("Invalid Current Password", status=status.HTTP_400_BAD_REQUEST)
 
             print(request.data.get("new_password"))
 
-            # password = make_password(request.data.get("new_password"))
             self.object.set_password(request.data.get("new_password"))
             self.object.save()
             return Response("Password changed successfully", status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # def password(self, request, pk=None):
-    #     user = request.user
-    #     userData = User.objects.get(id=user.id)
-    #     serializer = self.serializer_class(data=request.data)
-    #     if serializer.is_valid():
-    #         if 'old_password' or 'new_password' not in serializer.validated_data:
-    #             return Response({
-    #                 'error': 'Old and New Password required for change password.'
-    #             }, status=status.HTTP_400_BAD_REQUEST)
-    #         if self.user.check_password(self.request.data['old_password']):
-    #             password = make_password(self.request.data['new_password'])
-    #             serializer.save(password=password)
-    #             return Response({'sucess': 'Password successfully changed'})
 
 
 
@@ -336,7 +267,6 @@ class OddSemesterFeeViewSet(viewsets.ModelViewSet):
     queryset = semester_fees.objects.all()
     serializer_class = OddSemesterFeeSerializer
     permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    # permission_classes = [AllowAny,]
 
 
 # To view the BE depertment admission fee details.
@@ -344,50 +274,46 @@ class BEFeeViewSet(viewsets.ModelViewSet):
     queryset = be_fee_table.objects.all()
     serializer_class = BEFeeSerializer
     permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    # permission_classes = [AllowAny,]
 
 # To view the students details who are submit their admission fee.
 class AdmissionViewSet(viewsets.ModelViewSet):
     queryset = Admission.objects.all()
     serializer_class = AdmissonSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
 
 # To view the examination fee details of each depertment.
 class ExamFeeViewSet(viewsets.ModelViewSet):
     queryset = Exam_fee_table.objects.all()
     serializer_class = ExamFeeSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
 
 # To view the spot admission fee details.
 class SpotAdmissionFeeViewSet(viewsets.ModelViewSet):
     queryset = Spot_Admission_Fee.objects.all()
     serializer_class = SpotAdmissionFeeSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
 
 # To view the students details who are submit their examination fee.
 class ExaminationViewSet(viewsets.ModelViewSet):
     queryset = Examination_fee_table.objects.all()
     serializer_class = ExaminationSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
+
 # To view the students details who are submit their examination fee.
 class CompartmentalViewSet(viewsets.ModelViewSet):
     queryset = Compartmental_fee_table.objects.all()
     serializer_class = CompartmentalSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
+
 # To view the students details who are submit their examination fee.
 class BettermentViewSet(viewsets.ModelViewSet):
     queryset = Betterment_fee_table.objects.all()
     serializer_class = BettermentSerializer
-    # permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    permission_classes = [AllowAny,]
+    permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
+
 # To view the sell records of form and prospectus
 class FormAndProspectusViewSet(viewsets.ModelViewSet):
     queryset = form_and_prospectus_table.objects.all()
     serializer_class = FormAndProspectusSerializer
     permission_classes = [IsAuthenticated, IsAdminUser, TokenHasReadWriteScope]
-    # permission_classes = [AllowAny,]
+
