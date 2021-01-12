@@ -1,0 +1,10 @@
+django>2.2.5
+djangorestframework==3.10.3
+django-filter==2.2.0
+markdown==3.1.1
+mysqlclient==1.4.4
+django-cors-headers==3.1.1
+mod_wsgi==4.6.8
+uwsgi
+django-sslserver
+django-oauth-toolkit
