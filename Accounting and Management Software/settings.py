@@ -20,7 +20,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '8i(w*xox40#f7-$$hyn=zbzyi#1dkc=7)%al9qzb!4i-7p3$6)'
+SECRET_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -84,10 +84,10 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'jistdatabase',
+        'NAME': 'database_name',
         'HOST': 'localhost',
         'USER': 'root',
-        'PASSWORD': 'p@ssword',
+        'PASSWORD': 'password',
         'PORT': '3306',
     }
 }
@@ -148,7 +148,7 @@ OAUTH2_PROVIDER = {
     'REFRESH_TOKEN_EXPIRE_SECONDS': 7776000,
     # this is the list of available scopes
     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'gropes':'Access to your groups'},
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 7776000
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 576000
 }
 
 
